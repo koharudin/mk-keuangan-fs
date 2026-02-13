@@ -1,0 +1,10 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: be.dockerfile
+    ports:
+      - 81:80
+    volumes:
+      - ./be:/var/www
+      - ./be/public:/var/www/html
