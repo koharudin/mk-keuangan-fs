@@ -2,17 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Models\BukuTabungan;
+use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
-class BukuTabunganCommmand extends Command
+class UserCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:buku-tabungan-command';
+    protected $signature = 'app:user-command';
 
     /**
      * The console command description.
@@ -27,12 +28,11 @@ class BukuTabunganCommmand extends Command
     public function handle()
     {
         //
-        $this->create();
-    }
-    public function create(){
-        $row = new BukuTabungan();
-        $row->name = "Rumah Cikunir";
-        $row->user_id = 1;
-        $row->save();
+        $user = new User();
+        $user->name = "admin";
+        $user->password = Hash::make("admin");
+        $user->email = "koharudin.mail07@gmail.com";
+        $user->save();
+        $this->info("User {$user->name} created");
     }
 }
