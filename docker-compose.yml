@@ -5,6 +5,8 @@ services:
       dockerfile: be.dockerfile
     ports:
       - 81:80
+      - 5173:5173
     volumes:
       - ./be:/var/www
       - ./be/public:/var/www/html
+      - ./fe:/var/www/resources/react
