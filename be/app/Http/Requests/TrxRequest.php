@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class KategoriRequest extends FormRequest
+class TrxRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,10 @@ class KategoriRequest extends FormRequest
     {
         return [
             //
-            "buku_tabungan_uuid" => ["required"],
-            "name" => ["required"],
-            "order" => ["required"],
-            "type_id"=> ["required"]
+            "buku_tabungan_uuid" => ['required'],
+            "total" => ["required", "numeric"],
+            "waktu" => ['required', "date"],
+            "kategori_uuid" => ["required"]
         ];
     }
 }

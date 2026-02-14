@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Endpoint tidak ditemukan',
+                    'sytem_message'=>$e->getMessage()
                 ], 404);
             }
         });
@@ -33,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Data tidak ditemukan',
+                    'sytem_message'=>$e->getMessage()
                 ], 404);
             }
         });

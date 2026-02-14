@@ -18,6 +18,7 @@ class PengaturanBukuTabunganController extends ApiController
     {
         $user = auth()->user();
         $query = BukuTabungan::query();
+        $query->with(["listKolaborators.objUser"]);
         $query->where("user_id", $user->id);
         return $query->paginate(10);
     }

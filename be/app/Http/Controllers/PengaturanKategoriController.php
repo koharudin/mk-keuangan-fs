@@ -26,8 +26,13 @@ class PengaturanKategoriController extends ApiController
         if ($validator->fails()) {
             return $this->errorResponse("Validasi gagal", 400, $validator->errors());
         }
+        $validated = $validator->validated();
+        $buku = BukuTabungan::where("uuid",$validated['buku_tabungan_uuid'])->get()->first();
+        if(!$buku){
 
+        }
         $query = Kategori::query();
+        $query->where("buku_tabungan_id",$buku->id);
         return $query->paginate(10);
     }
 
@@ -52,6 +57,7 @@ class PengaturanKategoriController extends ApiController
             if ($buku) {
                 $row = new Kategori();
                 $row->name = @$validated['name'];
+                $row->order = @$validated['order'];
                 $row->buku_tabungan_id = $buku->id;
                 $row->type = @$validated['type_id'];
                 $row->save();
@@ -97,6 +103,7 @@ class PengaturanKategoriController extends ApiController
             if ($buku) {
                 $row = $kategori;
                 $row->name = @$validated['name'];
+                $row->order = @$validated['order'];
                 $row->buku_tabungan_id = $buku->id;
                 $row->type = @$validated['type_id'];
                 $row->save();
