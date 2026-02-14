@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AppController as ApiAppController;
+use App\Http\Controllers\PengaturanBukuTabunganController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,3 +10,7 @@ Route::get('/', function () {
 
 Route::post('/login', [ApiAppController::class,"login"]);
 Route::get('/login', [ApiAppController::class,"login"]);
+
+Route::group(["middleware"=>"auth:api"],function($route){
+    Route::resource("pengaturan-buku-tabungan",PengaturanBukuTabunganController::class)->parameter("pengaturan-buku-tabungan","bukuTabungan");
+});
