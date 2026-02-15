@@ -10,3 +10,23 @@ services:
       - ./be:/var/www
       - ./be/public:/var/www/html
       - ./fe:/var/www/resources/react
+  coba:
+    tty: true
+    build:
+      context: . 
+      dockerfile: starter-kit.dockerfile
+    ports:
+      - 3001:3000
+    volumes:
+      - ./starter-kit:/app
+  react:
+    tty: true
+    build:
+      context: . 
+      dockerfile: starter-kit.dockerfile
+    ports:
+      - 3002:5173
+    volumes:
+      - ./react:/app
+   # command: "npm install && npm run dev"
+    
