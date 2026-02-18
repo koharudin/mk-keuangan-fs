@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\LaporanBulananRequest;
 use App\Http\Requests\LoginRequest;
-use App\Models\BukuTabungan;
+use App\Models\Saku;
 use App\Models\Trx;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -28,7 +29,9 @@ class AppController extends ApiController
                 return $this->errorResponse("Kombinasi username dan password tidak ditemukan");
             } else {
                 $token = $user->createToken("app_token");
-                return $this->successResponse(["message" => "Oke", "data" => $validated, "user" => $user, "app_token" => $token]);
+                return $this->successResponse([
+                    "app_token" => $token
+                ], "Login Berhasil");
             }
         } else {
             return $this->errorResponse("Kombinasi username dan password tidak ditemukan");
@@ -41,55 +44,39 @@ class AppController extends ApiController
         return $this->successResponse(null, "Aplikasi berhasil logout/keluar.");
     }
 
-    public function laporan_bulanan($tahun, $bulan)
+    public function laporan_bulanan(LaporanBulananRequest $request)
     {
 
         try {
-            $validator = Validator::make(request()->all(), [
-                'buku_tabungan_uuid' => 'required',
-            ]);
-
-            if ($validator->fails()) {
-                return $this->errorResponse("Validasi gagal", 400, $validator->errors());
+            $validated = $request->validated();
+            $saku = Saku::findByUUID(@$validated['saku_uuid']);
+            if (!$saku) {
+                throw new Exception("Saku tidak ditemukan");
             }
-            $validated = $validator->validated();
-            $buku = BukuTabungan::findByUUID(@$validated['buku_tabungan_uuid']);
-            if(!$buku){
-                throw new Exception("Buku tabungan tidak ditemukan");
-            }
-            $buku->validAccess();
+            $tahun = $validated['tahun'];
+            $bulan = $validated["bulan"];
+            $saku->validAccess();
             $user = auth()->user();
-            $query = Trx::query();
-            $query->orderBy("waktu","asc");
-            $query->with(["objKategori"]);
-            $query->whereYear("waktu", $tahun);
-            $rows = $query->get();
-            $total_pemasukan = 0;
-            $list_pemasukan = $rows->filter(function ($trx) use (&$total_pemasukan) {
-                if ($trx->objKategori->type == Trx::PEMASUKAN) {
-                    $total_pemasukan += $trx->total;
-                    return true;
-                }
-            });
-
-            $total_pengeluaran = 0;
-            $list_pengeluaran = $rows->filter(function ($trx) use (&$total_pengeluaran) {
-                if ($trx->objKategori->type == Trx::PENGELUARAN) {
-                    $total_pengeluaran += $trx->total;
-                    return true;
-                }
-            });
-            return $this->successResponse([
-                "tahun" => $tahun,
-                "bulan" => $bulan,
-                "total_pemasukan" => $total_pemasukan,
-                "total_pengeluaran" => $total_pengeluaran,
-                "list_pemasukan" => $list_pemasukan,
-                "list_pengeluaran" => $list_pengeluaran,
-                "result" => $rows
-            ]);
+            $summary  = $saku->laporanPerBulan($saku,$tahun,$bulan);
+            return $this->successResponse($summary);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage());
         }
+    }
+
+
+    public function dashboard(){
+        $user = auth()->user();
+        $sakus = Saku::allGranted($user->id)->get();
+        $defaultSaku = $sakus->first();
+        $tahun = date("Y");
+        $bulan = date("m");
+        $summary = Saku::laporanPerBulan($defaultSaku,$tahun,$bulan);
+        return $this->successResponse([
+            'user'=>$user,
+            'jumlah_saku'=>$sakus->count(),
+            'total_pemasukan_bulan_ini'=>$summary['total_pemasukan'],
+            'total_pengeluaran_bulan_ini'=>$summary['total_pengeluaran'],
+        ]);
     }
 }

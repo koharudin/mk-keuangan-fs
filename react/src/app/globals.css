@@ -35,7 +35,7 @@
 }
 
 html {
-  display: flex;
+  display: block;
   inline-size: 100%;
   min-block-size: 100%;
 }

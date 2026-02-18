@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class BukuTabunganKolaborators extends Model
+class SakuKolaborators extends Model
 {
     //
-    protected $table = 'buku_tabungan_kolaborator';
+    protected $table = 'saku_kolaborator';
     use SoftDeletes;
 
     protected static function boot()
@@ -28,7 +28,7 @@ class BukuTabunganKolaborators extends Model
 
     public static function findByUUID($uuid)
     {
-        $row = BukuTabunganKolaborators::where("uuid", $uuid)->get()->first();
+        $row = SakuKolaborators::where("uuid", $uuid)->get()->first();
         return $row;
     }
     public function objUser(){

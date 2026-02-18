@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Models\BukuTabungan;
+use App\Models\Saku;
 use Illuminate\Console\Command;
 
-class BukuTabunganCommmand extends Command
+class SakuCommmand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:buku-tabungan-command';
+    protected $signature = 'app:saku-command';
 
     /**
      * The console command description.
@@ -30,7 +30,7 @@ class BukuTabunganCommmand extends Command
         $this->create();
     }
     public function create(){
-        $row = new BukuTabungan();
+        $row = new Saku();
         $row->name = "Rumah Cikunir";
         $row->user_id = 1;
         $row->save();

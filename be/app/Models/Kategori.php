@@ -25,4 +25,8 @@ class Kategori extends Model
             $model->uuid = (string) Str::uuid();
         });
     }
+
+    public function objSaku(){
+        return $this->belongsTo(Saku::class,"saku_id","id");
+    }
 }

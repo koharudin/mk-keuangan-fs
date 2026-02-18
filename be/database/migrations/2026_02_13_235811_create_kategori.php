@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('kategori', function (Blueprint $table) {
             $table->id();
+            $table->uuid("uuid");
             $table->string("name");
             $table->bigInteger("parent_id")->nullable();
-            $table->bigInteger("buku_tabungan_id");
+            $table->bigInteger("saku_id");
             $table->integer("type")->default(Trx::PENGELUARAN); //1:Pemasukan, 2: Pengeluaran
             $table->softDeletes();
             $table->timestamps();

@@ -1,7 +1,8 @@
 import React from "react";
-import Sidebar from "./Sidebar";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Sidebar from "../Sidebar";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
+import { Outlet } from 'react-router-dom'
 
 interface VerticalLayoutProps {
     children: React.ReactNode;
@@ -11,6 +12,7 @@ const VerticalLayout: React.FC<VerticalLayoutProps> = ({ children }) => {
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
+
                 {/* Menu */}
                 <Sidebar />
                 {/* / Menu */}
@@ -21,7 +23,7 @@ const VerticalLayout: React.FC<VerticalLayoutProps> = ({ children }) => {
 
                     {/* Content wrapper */}
                     <div className="content-wrapper">
-                        {children}
+                        <Outlet />
 
                         <Footer />
 

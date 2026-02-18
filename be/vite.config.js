@@ -30,7 +30,8 @@ export default defineConfig({
         '@menu': path.resolve(__dirname, 'resources/react/vuexy/src/@menu'),
         '@layouts': path.resolve(__dirname, 'resources/react/vuexy/src/@layouts'),
         '@views': path.resolve(__dirname, 'resources/react/vuexy/src/views'),
-        '@configs': path.resolve(__dirname, 'resources/react/vuexy/src/configs')
+        '@configs': path.resolve(__dirname, 'resources/react/vuexy/src/configs'),
+        '@myreact': path.resolve(__dirname, 'resources/react'),
       }
     }
 });

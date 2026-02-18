@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\TrxRequest;
-use App\Models\BukuTabungan;
+use App\Models\Saku;
 use App\Models\Kategori;
 use App\Models\Trx;
 use Exception;
@@ -22,20 +22,53 @@ class TrxKeuanganController extends ApiController
         //
         try {
             $validator = Validator::make(request()->all(), [
-                'buku_tabungan_uuid' => 'required',
+                'saku_uuid' => ''
             ]);
 
             if ($validator->fails()) {
                 return $this->errorResponse("Validasi gagal", 400, $validator->errors());
             }
             $validated = $validator->validated();
-            $buku = BukuTabungan::where("uuid", $validated['buku_tabungan_uuid'])->get()->first();
-            if (!$buku) {
-                return $this->errorResponse("Buku Tabungan tidak ditemukan");
+            $saku_uuid = @$validated['saku_uuid'];
+            $query =  Saku::query();
+
+            $sakuIds = [];
+            if (!$saku_uuid) {
+                //cari yang kolaborator dg dia
+                $userId = auth()->user()->id;
+
+                $sakusAsCreator = Saku::where(function ($query) use ($userId) {
+                    $query->where("user_id", $userId);
+                    $query->orWhereHas(
+                        'listKolaborators',
+                        function ($query) use ($userId) {
+                            $query->where('kolaborator_id', $userId);
+                        }
+
+                    );
+                })->get();
+                $sakuIds = $sakusAsCreator->pluck("id")->toArray();
+            } else {
+                $query->where("uuid", $saku_uuid);
+                $saku = $query->get()->first();
+                if (!$saku) {
+                    return $this->errorResponse("Saku tidak ditemukan");
+                }
+                $saku->validAccess();
+                $sakuIds[] = $saku->id;
             }
-            $buku->validAccess();
+
             $query = Trx::query();
-            $query->where("buku_tabungan_id", $buku->id);
+            if(request()->has("search")){
+                $query->where("keterangan","ilike","%".request()->input("search")."%");
+            }
+            $query->with(['objKategori', 'objSaku','objUser']);
+            if (count($sakuIds)) {
+                $query->whereIn("saku_id", $sakuIds);
+            } else {
+                return $this->errorResponse("Buat Saku terlebih dahulu");
+            }
+
             return $query->paginate(10);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage());
@@ -59,9 +92,10 @@ class TrxKeuanganController extends ApiController
         try {
             DB::beginTransaction();
             $validated =  $request;
-            $buku = BukuTabungan::where("uuid", @$validated['buku_tabungan_uuid'])->get()->first();
-            if (!$buku) {
-                return $this->errorResponse("Buku Tabungan tidak ditemukan");
+            $query = Saku::query();
+            $saku  = $query->where("uuid", @$validated['saku_uuid'])->get()->first();
+            if (!$saku) {
+                return $this->errorResponse("Saku tidak ditemukan");
             }
 
             $kategori = Kategori::where("uuid", @$validated['kategori_uuid'])->get()->first();
@@ -69,13 +103,15 @@ class TrxKeuanganController extends ApiController
                 return $this->errorResponse("Kategori tidak ditemukan");
             }
 
-            if ($kategori->buku_tabungan_id != $buku->id) {
-                return $this->errorResponse("Kategori dan Buku Tabungan tidak valid");
+            if ($kategori->saku_id != $saku->id) {
+                return $this->errorResponse("Kategori dan Saku tidak valid");
             }
 
             $row = new Trx();
-            $row->buku_tabungan_id = $buku->id;
+            $row->saku_id = $saku->id;
+            $row->user_id = auth()->user()->id;
             $row->kategori_id = $kategori->id;
+            $row->keterangan = $validated['keterangan'];
             $row->total = $validated['total'];
             $row->waktu = $validated['waktu'];
             $row->save();
@@ -93,6 +129,7 @@ class TrxKeuanganController extends ApiController
     public function show(Trx $trx)
     {
         //
+        $trx->load(['objKategori', 'objSaku','objUser']);
         return $this->successResponse($trx);
     }
 
@@ -102,6 +139,7 @@ class TrxKeuanganController extends ApiController
     public function edit(Trx $trx)
     {
         //
+        $trx->load(['objKategori', 'objSaku','objUser']);
         return $this->successResponse($trx);
     }
 
@@ -114,9 +152,9 @@ class TrxKeuanganController extends ApiController
         try {
             DB::beginTransaction();
             $validated =  $request;
-            $buku = BukuTabungan::where("uuid", @$validated['buku_tabungan_uuid'])->get()->first();
-            if (!$buku) {
-                return $this->errorResponse("Buku Tabungan tidak ditemukan");
+            $saku = Saku::where("uuid", @$validated['saku_uuid'])->get()->first();
+            if (!$saku) {
+                return $this->errorResponse("Saku tidak ditemukan");
             }
 
             $kategori = Kategori::where("uuid", @$validated['kategori_uuid'])->get()->first();
@@ -124,13 +162,14 @@ class TrxKeuanganController extends ApiController
                 return $this->errorResponse("Kategori tidak ditemukan");
             }
 
-            if ($kategori->buku_tabungan_id != $buku->id) {
-                return $this->errorResponse("Kategori dan Buku Tabungan tidak valid");
+            if ($kategori->saku_id != $saku->id) {
+                return $this->errorResponse("Kategori dan Saku tidak valid");
             }
 
             $row = $trx;
-            $row->buku_tabungan_id = $buku->id;
+            $row->saku_id = $saku->id;
             $row->kategori_id = $kategori->id;
+            $row->keterangan = $validated['keterangan'];
             $row->total = $validated['total'];
             $row->waktu = $validated['waktu'];
 

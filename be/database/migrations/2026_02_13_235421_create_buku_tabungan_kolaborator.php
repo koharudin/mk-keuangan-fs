@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('buku_tabungan_kolaborator', function (Blueprint $table) {
+        Schema::create('saku_kolaborator', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("buku_id");
+            $table->bigInteger("saku_id");
             $table->uuid("uuid");
             $table->bigInteger("kolaborator_id");
             $table->integer("aktif")->default(1);
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('buku_tabungan_kolaborator');
+        Schema::dropIfExists('saku_kolaborator');
     }
 };

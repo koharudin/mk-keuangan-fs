@@ -21,14 +21,18 @@ import ScrollToTop from '@core/components/scroll-to-top'
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 
+
+
 const MyLayout =  (props: ChildrenType) => {
   const { children } = props
-
   // Vars
   const direction = 'ltr'
   const mode =  getMode()
+  console.log("mode");
+  console.log(mode);
   const systemMode =  getSystemMode()
-
+  console.log("systemMode");
+  console.log(systemMode);
   return (
     <Providers direction={direction}>
       <LayoutWrapper

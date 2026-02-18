@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useMemo } from 'react'
+import { Fragment,  useMemo } from 'react'
 
 // MUI Imports
 import { deepmerge } from '@mui/utils'
@@ -92,7 +92,7 @@ const CustomThemeProvider = (props: Props) => {
   }, [settings.primaryColor, settings.skin, currentMode])
 
   return (
-    <div options={{
+    <Fragment options={{
       prepend: true,
       ...(direction === 'rtl' && {
         key: 'rtl',
@@ -111,7 +111,7 @@ const CustomThemeProvider = (props: Props) => {
           {children}
         </>
       </ThemeProvider>
-    </div>
+    </Fragment>
   )
 }
 

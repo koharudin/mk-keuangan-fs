@@ -14,7 +14,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>@yield('title', 'Vuexy Laravel')</title>
+    <title>@yield('title', 'SakuKu')</title>
 
     <meta name="description" content="" />
 
@@ -45,6 +45,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/form-validation.css') }}" />
+    <!-- Page -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}" />
 
     <!-- Helpers -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
@@ -55,7 +57,7 @@
 </head>
 
 <body>
-   @yield("content")
+    @yield("content")
     <!-- Core JS -->
     <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
@@ -83,4 +85,5 @@
 
     @yield('page-script')
 </body>
+
 </html>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BukuTabunganRequest extends FormRequest
+class LaporanBulananRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,9 @@ class BukuTabunganRequest extends FormRequest
     {
         return [
             //
-            "name"=> ["required"]
+            "tahun" => ["required"],
+            "bulan" => ["required"],
+            "saku_uuid"=>["required"]
         ];
     }
 }

@@ -23,7 +23,7 @@ class KategoriRequest extends FormRequest
     {
         return [
             //
-            "buku_tabungan_uuid" => ["required"],
+            "saku_uuid" => ["required"],
             "name" => ["required"],
             "order" => ["required"],
             "type_id"=> ["required"]

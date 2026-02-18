@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\BukuTabunganRequest;
-use App\Models\BukuTabungan;
+use App\Http\Requests\SakuRequest;
+use App\Models\Saku;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PengaturanBukuTabunganController extends ApiController
+class PengaturanSakuController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +17,12 @@ class PengaturanBukuTabunganController extends ApiController
     public function index()
     {
         $user = auth()->user();
-        $query = BukuTabungan::query();
+        $userId = $user->id;
+        $query = Saku::query();
+        $sakus = Saku::allGranted($userId)->get();
+
+        $query->whereIn("id", $sakus->pluck(["id"])->toArray());
         $query->with(["listKolaborators.objUser"]);
-        $query->where("user_id", $user->id);
         return $query->paginate(10);
     }
 
@@ -34,17 +37,17 @@ class PengaturanBukuTabunganController extends ApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BukuTabunganRequest $request)
+    public function store(SakuRequest $request)
     {
         try {
             DB::beginTransaction();
             $validated = $request->validated();
-            $row = new BukuTabungan();
+            $row = new Saku();
             $row->name = $validated['name'];
             $row->user_id = auth()->user()->id;
             $row->save();
             DB::commit();
-            return $this->successResponse($row);
+            return $this->successResponse($row, "Data berhasil disimpan.");
         } catch (Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage());
@@ -54,31 +57,31 @@ class PengaturanBukuTabunganController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show(BukuTabungan $bukuTabungan)
+    public function show(Saku $saku)
     {
         //
-        return $this->successResponse($bukuTabungan);
+        return $this->successResponse($saku);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(BukuTabungan $bukuTabungan)
+    public function edit(Saku $saku)
     {
         //
-        return $this->successResponse($bukuTabungan);
+        return $this->successResponse($saku);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(BukuTabunganRequest $request, BukuTabungan $bukuTabungan)
+    public function update(SakuRequest $request, Saku $saku)
     {
         //
         try {
             DB::beginTransaction();
             $validated = $request->validated();
-            $row = $bukuTabungan;
+            $row = $saku;
             $row->name = $validated['name'];
             $row->save();
             DB::commit();
@@ -92,11 +95,11 @@ class PengaturanBukuTabunganController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BukuTabungan $bukuTabungan)
+    public function destroy(Saku $saku)
     {
         //
         try {
-            $row = $bukuTabungan;
+            $row = $saku;
             $row->delete();
             return $this->successResponse($row);
         } catch (Exception $e) {

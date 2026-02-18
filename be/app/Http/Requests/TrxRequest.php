@@ -23,9 +23,10 @@ class TrxRequest extends FormRequest
     {
         return [
             //
-            "buku_tabungan_uuid" => ['required'],
+            "saku_uuid" => ['required'],
             "total" => ["required", "numeric"],
             "waktu" => ['required', "date"],
+            "keterangan" => ['required'],
             "kategori_uuid" => ["required"]
         ];
     }

@@ -57,4 +57,12 @@ class Trx extends Model
     {
         return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
     }
+    public function objSaku()
+    {
+        return $this->belongsTo(Saku::class, 'saku_id', 'id');
+    }
+    public function objUser()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

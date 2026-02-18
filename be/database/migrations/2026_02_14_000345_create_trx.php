@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('trx', function (Blueprint $table) {
             $table->id();
+            $table->string("keterangan",200);
             $table->timestamp("waktu");
-            $table->bigInteger("buku_tabungan_id");
+            $table->bigInteger("saku_id");
+            $table->bigInteger("user_id");
             $table->bigInteger("kategori_id");
             $table->float("total");
             $table->bigInteger("created_by")->nullable();
