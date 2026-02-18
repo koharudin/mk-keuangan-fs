@@ -52,3 +52,33 @@ RUN npm run build
 # -----------------------
 # Set Apache DocumentRoot ke public/
 RUN sed -i 's|/var/www/html|/var/www/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Set permission /tmp agar writable
+RUN chmod 1777 /tmp
+
+RUN mkdir -p /var/www/storage/tmp \
+    && chown -R www-data:www-data /var/www/storage/tmp
+ENV TMPDIR=/var/www/storage/tmp
+
+# ===============================
+# Laravel permission & Passport
+# ===============================
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/framework/tmp \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Generate APP_KEY jika belum ada
+RUN php artisan key:generate --force || true
+
+# Generate Passport keys
+RUN php artisan passport:keys --force || true
+
+RUN  chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+RUN chmod 600 storage/oauth-private.key storage/oauth-public.key
+RUN chown www-data:www-data storage/oauth-private.key storage/oauth-public.key
+
