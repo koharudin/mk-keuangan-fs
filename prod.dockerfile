@@ -47,3 +47,8 @@ COPY fe/ /var/www/resources/react/
 WORKDIR /var/www 
 RUN npm install
 RUN npm run build
+
+
+# -----------------------
+# Set Apache DocumentRoot ke public/
+RUN sed -i 's|/var/www/html|/var/www/public|g' /etc/apache2/sites-available/000-default.conf
