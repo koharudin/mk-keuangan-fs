@@ -1,0 +1,8 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    ports:
+      - 81:80
+      - 5173:5173
