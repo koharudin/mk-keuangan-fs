@@ -66,7 +66,7 @@ services:
       VITE_API_URL: https://saku.mediakolaborasi.com/api
 
       # GOOGLE OAUTH
-      GOOGLE_CLIENT_ID: 1056080096816-k1i5ua1iefsir0lmrbo7m5dbc393umn5.apps.googleusercontent.com
-      GOOGLE_CLIENT_SECRET: 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
+      GOOGLE_CLIENT_ID: 
+      GOOGLE_CLIENT_SECRET: 
       GOOGLE_REDIRECT_URI: https://saku.mediakolaborasi.com/api/auth/google/callback
       FRONTEND_URL: https://saku.mediakolaborasi.com
