@@ -11,7 +11,6 @@ services:
       # APP
       APP_NAME: Laravel
       APP_ENV: local
-      APP_KEY: base64:wO2dNwSATQy0rAZhz8lPAXjmiRCqTHhTEYWwF/dtvb0=
       APP_DEBUG: "true"
       APP_URL: http://localhost
 
