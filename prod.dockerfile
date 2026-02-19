@@ -28,13 +28,18 @@ RUN curl -sS https://getcomposer.org/installer | php \
     -- --install-dir=/usr/local/bin --filename=composer
 
 
+# 1. Copy composer files SAJA
+COPY be/composer.json be/composer.lock ./
+
+# 2. Install dependency (akan di-cache)
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader
+
 
 # COPY BACKEND (be folder)
 COPY be/ /var/www/
-
-# Composer install
-COPY be/composer.json be/composer.lock /var/www/
-RUN composer install --no-dev
 
 WORKDIR /var/www   # masih di /var/www
 
