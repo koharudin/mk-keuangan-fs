@@ -34,7 +34,7 @@ COPY be/ /var/www/
 
 # Composer install
 COPY be/composer.json be/composer.lock /var/www/
-RUN composer update
+RUN composer install --no-dev
 
 WORKDIR /var/www   # masih di /var/www
 
