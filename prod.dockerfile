@@ -35,8 +35,8 @@ COPY be/composer.json be/composer.lock ./
 RUN composer install \
     --no-dev \
     --prefer-dist \
-    --optimize-autoloader
-
+    --optimize-autoloader \
+    --no-scripts
 
 # COPY BACKEND (be folder)
 COPY be/ /var/www/

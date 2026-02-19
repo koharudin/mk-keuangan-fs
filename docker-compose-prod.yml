@@ -7,6 +7,13 @@ services:
     ports:
       - 81:80
       - 5173:5173
+    command: >
+      sh -c "
+      php artisan key:generate --force &&
+      php artisan package:discover &&
+      php artisan optimize &&
+      apache2-foreground
+      "
     environment:
       # APP
       APP_NAME: Laravel
