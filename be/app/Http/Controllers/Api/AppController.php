@@ -79,4 +79,8 @@ class AppController extends ApiController
             'total_pengeluaran_bulan_ini'=>$summary['total_pengeluaran'],
         ]);
     }
+    public function me(){
+        $user = auth()->user();
+        return $this->successResponse($user);
+    }
 }

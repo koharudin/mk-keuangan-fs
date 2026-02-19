@@ -19,47 +19,54 @@ import SakuCreate from '../pages/saku/SakuCreate';
 import SakuShow from '../pages/saku/SakuShow';
 import SakuEdit from '../pages/saku/SakuEdit';
 import LaporanBulanan from '../pages/laporan/LaporanBulanan';
+import RequireAuth from '../components/RequireAuth';
+import OAuthCallback from '../pages/auth/OAuthCallback';
 
 const AppRoutes = () => {
     return useRoutes([
         {
-            element: <VerticalLayout />,
+            element: <RequireAuth />,
             children: [
-                { path: '/', element: <Dashboard /> },
-            ],
-        },
-        {
-            path: 'transaksi', element: <VerticalLayout />,
-            children: [
-                { index: true, element: <TrxIndex /> },      // GET /Trx
-                { path: 'create', element: <TrxCreate /> },  // GET /Trx/create
-                { path: ':uuid', element: <TrxShow /> },       // GET /Trx/{id}
-                { path: ':uuid/edit', element: <TrxEdit /> },  // GET /Trx/{id}/edit
-            ],
-        },
-        {
-            path: 'pengaturan/kategori', element: <VerticalLayout />,
-            children: [
-                { index: true, element: <KategoriIndex /> },      // GET /kategori
-                { path: 'create', element: <KategoriCreate /> },  // GET /kategori/create
-                { path: ':uuid', element: <KategoriShow /> },       // GET /kategori/{id}
-                { path: ':uuid/edit', element: <KategoriEdit /> },  // GET /kategori/{id}/edit
-            ],
-        },
-        {
-            path: 'pengaturan/saku', element: <VerticalLayout />,
-            children: [
-                { index: true, element: <SakuIndex /> },      // GET /Saku
-                { path: 'create', element: <SakuCreate /> },  // GET /Saku/create
-                { path: ':uuid', element: <SakuShow /> },       // GET /Saku/{id}
-                { path: ':uuid/edit', element: <SakuEdit /> },  // GET /Saku/{id}/edit
-            ],
-        },
-        {
-            path: 'laporan', element: <VerticalLayout />,
-            children: [
-                { path: 'bulanan', element: <LaporanBulanan /> },  // GET /Saku/create
-            ],
+                {
+                    element: <VerticalLayout />,
+                    children: [
+                        { path: '/', element: <Dashboard /> },
+                    ],
+                },
+                {
+                    path: 'transaksi', element: <VerticalLayout />,
+                    children: [
+                        { index: true, element: <TrxIndex /> },      // GET /Trx
+                        { path: 'create', element: <TrxCreate /> },  // GET /Trx/create
+                        { path: ':uuid', element: <TrxShow /> },       // GET /Trx/{id}
+                        { path: ':uuid/edit', element: <TrxEdit /> },  // GET /Trx/{id}/edit
+                    ],
+                },
+                {
+                    path: 'pengaturan/kategori', element: <VerticalLayout />,
+                    children: [
+                        { index: true, element: <KategoriIndex /> },      // GET /kategori
+                        { path: 'create', element: <KategoriCreate /> },  // GET /kategori/create
+                        { path: ':uuid', element: <KategoriShow /> },       // GET /kategori/{id}
+                        { path: ':uuid/edit', element: <KategoriEdit /> },  // GET /kategori/{id}/edit
+                    ],
+                },
+                {
+                    path: 'pengaturan/saku', element: <VerticalLayout />,
+                    children: [
+                        { index: true, element: <SakuIndex /> },      // GET /Saku
+                        { path: 'create', element: <SakuCreate /> },  // GET /Saku/create
+                        { path: ':uuid', element: <SakuShow /> },       // GET /Saku/{id}
+                        { path: ':uuid/edit', element: <SakuEdit /> },  // GET /Saku/{id}/edit
+                    ],
+                },
+                {
+                    path: 'laporan', element: <VerticalLayout />,
+                    children: [
+                        { path: 'bulanan', element: <LaporanBulanan /> },  // GET /Saku/create
+                    ],
+                },
+            ]
         },
         {
             element: <BlankLayout />,
@@ -74,6 +81,7 @@ const AppRoutes = () => {
                 { path: '*', element: <NotFound /> },
             ],
         },
+        { path: 'oauth/callback', element: <OAuthCallback /> },
     ]);
 };
 

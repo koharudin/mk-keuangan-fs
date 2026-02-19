@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "../services/api";
+import { getToken } from "../utils/auth";
+interface User {
+  name: string;
+  email?: string;
+  avatar?: string;
+  role?: string;
+}
 
 const Navbar: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) return;
+
+    api.get("me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+      .then((res) => {
+        setUser(res.data.data);
+      })
+      .catch((err) => {
+        console.error("API error:", err);
+        localStorage.removeItem("auth_token");
+      });
+  }, []);
+
   const handleMenuToggle = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     // TODO: toggle sidebar (body class / state / context)
@@ -128,8 +157,8 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex-grow-1">
-                      <h6 className="mb-0">John Doe</h6>
-                      <small className="text-body-secondary">Admin</small>
+                      <h6 className="mb-0">{user?.name}</h6>
+                      <small className="text-body-secondary">{user?.email}</small>
                     </div>
                   </div>
                 </a>

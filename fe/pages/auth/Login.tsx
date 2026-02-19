@@ -89,8 +89,8 @@ export default function Login() {
                                 </a>
                             </div>
 
-                            <h4 className="mb-1">TERUKUR. AMANAH👋</h4>
-                            <p className="mb-6">
+                            <h4 className="mb-1 text-center" >TERUKUR. AMANAH👋</h4>
+                            <p className="mb-6" style={{ display: "none" }}>
 
                                 “Dan orang-orang yang apabila membelanjakan (harta), mereka tidak berlebihan dan tidak kikir, tetapi berada di tengah-tengah.”
                                 (QS. Al-Furqan: 67)
@@ -136,14 +136,7 @@ export default function Login() {
                                             checked={remember}
                                             onChange={e => setRemember(e.target.checked)}
                                         />
-                                        <label className="form-check-label">
-                                            Remember Me
-                                        </label>
                                     </div>
-
-                                    <a href="/forgot-password">
-                                        <p className="mb-0">Forgot Password?</p>
-                                    </a>
                                 </div>
 
                                 <button
@@ -154,27 +147,10 @@ export default function Login() {
                                     {loading ? 'Signing in...' : 'Login'}
                                 </button>
                             </form>
-
-                            <p className="text-center">
-                                <span>New on our platform?</span>{' '}
-                                <a href="/register">Create an account</a>
-                            </p>
-
-                            <div className="divider my-6">
-                                <div className="divider-text">or</div>
-                            </div>
-
                             <div className="d-flex justify-content-center">
-                                <button className="btn btn-icon rounded-circle btn-text-facebook me-1_5">
-                                    <i className="icon-base ti tabler-brand-facebook-filled" />
-                                </button>
-                                <button className="btn btn-icon rounded-circle btn-text-twitter me-1_5">
-                                    <i className="icon-base ti tabler-brand-twitter-filled" />
-                                </button>
-                                <button className="btn btn-icon rounded-circle btn-text-github me-1_5">
-                                    <i className="icon-base ti tabler-brand-github-filled" />
-                                </button>
-                                <button className="btn btn-icon rounded-circle btn-text-google-plus">
+                                <button className="btn btn-icon rounded-circle btn-text-google-plus" onClick={() => {
+                                    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`
+                                }}>
                                     <i className="icon-base ti tabler-brand-google-filled" />
                                 </button>
                             </div>

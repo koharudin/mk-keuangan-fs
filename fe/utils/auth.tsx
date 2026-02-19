@@ -1,6 +1,6 @@
 export const getToken = () => localStorage.getItem('app_tokenx');
 
-export const isLoggedIn = () => !!getToken();
+export const isAuthenticated = () => !!getToken();
 
 export const logout = () => {
     console.log("logging out...");

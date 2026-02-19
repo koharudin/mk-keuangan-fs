@@ -11,7 +11,7 @@ export default defineConfig({
         cors:true,
         strictPort: true,
         hmr: {
-          host: 'host.docker.internal', // ⬅️ WAJIB utk Docker
+          host: 'localhost', // ⬅️ WAJIB utk Docker
         },
       },
     plugins: [
