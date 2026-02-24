@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\PengaturanSakuController;
 use App\Http\Controllers\PengaturanKategoriController;
 use App\Http\Controllers\TrxKeuanganController;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,7 +13,9 @@ Route::get('/', function () {
 
 Route::post('/login', [AppController::class, "login"]);
 Route::get('/logout', [AppController::class, "logout"]);
-
+Route::get("/test",function(){
+    return response()->json(["message"=>"ok"]);
+});
 use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/auth/google', function () {
@@ -27,12 +30,12 @@ Route::get('/auth/google/callback', function () {
     // cari / buat user
     $user = \App\Models\User::firstOrCreate(
         ['email' => $googleUser->getEmail()],
-        ['name' => $googleUser->getName()]
+        ['name' => $googleUser->getName(), 'password' => Hash::make(uniqid())],
     );
 
     // generate token (Sanctum / Passport)
     $token = $user->createToken('app_token');
-    
+
     // redirect balik ke React
     return redirect(
         config('app.frontend_url') .
@@ -42,7 +45,7 @@ Route::get('/auth/google/callback', function () {
 
 
 Route::group(["middleware" => "auth:api"], function ($route) {
-    Route::get("me",[AppController::class,"me"]);
+    Route::get("me", [AppController::class, "me"]);
     Route::resource("pengaturan/saku", PengaturanSakuController::class)->parameter("pengaturan-saku", "saku");
     Route::resource("pengaturan/kategori", PengaturanKategoriController::class)->parameter("pengaturan-kategori", "kategori");
     Route::get("pengaturan/kategori-by-saku", [PengaturanKategoriController::class, "bySaku"]);
