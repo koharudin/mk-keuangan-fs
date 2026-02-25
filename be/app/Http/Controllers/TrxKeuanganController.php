@@ -68,7 +68,7 @@ class TrxKeuanganController extends ApiController
             } else {
                 return $this->errorResponse("Buat Saku terlebih dahulu");
             }
-
+            $query->orderBy("created_at","desc");
             return $query->paginate(10);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage());
