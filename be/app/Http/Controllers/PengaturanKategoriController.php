@@ -37,7 +37,7 @@ class PengaturanKategoriController extends ApiController
             $query->whereIn("saku_id", $sakus->pluck(["id"])->toArray());
         });
         $query->with(['objSaku']);
-        return $query->paginate(10);
+        return $query->paginate(100);
     }
 
     public function bySaku()
